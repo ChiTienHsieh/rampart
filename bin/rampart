@@ -18,6 +18,7 @@
 #   --max-iterations N    Max iterations for ralph mode (default: 10)
 #   --completion-promise TEXT  Promise phrase to signal completion
 #   --env KEY=VALUE  Pass environment variable to container (can be repeated)
+#   -f, --file PATH       Read prompt from file
 #   -y, --yes     Skip confirmation prompts (auto-accept token)
 #   -h, --help    Show this help message
 
@@ -91,6 +92,7 @@ Flags:
   -w, --workspace         Workspace directory (default: current dir)
   --build                 Force rebuild images
   --shell                 Open interactive shell (no prompt needed)
+  -f, --file PATH         Read prompt from file
   --env KEY=VALUE         Pass env var to container (repeatable)
   -y, --yes               Skip confirmation prompts
   -h, --help              Show this help
@@ -107,6 +109,7 @@ Examples:
   rampart "fix all TypeScript errors"
   rampart --uv "create a FastAPI server with SQLAlchemy"
   rampart -w ~/projects/myapp "refactor the auth module"
+  rampart -f ./plan.md               # Prompt from file
   rampart --shell                    # Debug: open shell in container
   rampart --env DEBUG=1 "run tests"  # Pass env vars
 
@@ -128,6 +131,7 @@ PROFILES=()
 WORKSPACE="$(pwd)"
 BUILD_FLAG=""
 PROMPT=""
+PROMPT_FILE=""
 SHELL_MODE=false
 RALPH_MODE=false
 MAX_ITERATIONS=10
@@ -182,6 +186,10 @@ while [[ $# -gt 0 ]]; do
             AUTO_YES=true
             shift
             ;;
+        -f|--file)
+            PROMPT_FILE="$2"
+            shift 2
+            ;;
         -v|--verbose)
             VERBOSE=true
             shift
@@ -202,6 +210,22 @@ while [[ $# -gt 0 ]]; do
             ;;
     esac
 done
+
+# ============ Read Prompt from File ============
+
+if [ -n "$PROMPT_FILE" ]; then
+    # Error if both -f and inline prompt provided
+    if [ -n "$PROMPT" ]; then
+        log_error "Cannot use both -f/--file and inline prompt"
+        exit 1
+    fi
+    if [ ! -f "$PROMPT_FILE" ]; then
+        log_error "Prompt file not found: $PROMPT_FILE"
+        exit 1
+    fi
+    PROMPT="$(cat "$PROMPT_FILE")"
+    log_info "Prompt loaded from: $PROMPT_FILE ($(wc -c < "$PROMPT_FILE" | tr -d ' ') bytes)"
+fi
 
 # ============ Token Auto-Detection ============
 

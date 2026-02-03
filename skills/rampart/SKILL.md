@@ -44,6 +44,9 @@ rampart --uv "create FastAPI server with SQLAlchemy models"
 # Specific workspace
 rampart -w /path/to/project "refactor auth module"
 
+# Prompt from file (for long/complex prompts)
+rampart -f ./plan.md
+
 # Force rebuild images
 rampart --build "update dependencies"
 
@@ -97,6 +100,7 @@ rampart "Read plan at ./ai_chatroom/plan.md and implement it"
 --playwright      Include Playwright [TODO]
 -w, --workspace   Workspace directory (default: cwd)
 --build           Force rebuild images
+-f, --file PATH   Read prompt from file
 --env KEY=VALUE   Pass env var to container (repeatable)
 -y, --yes         Skip confirmation prompts
 

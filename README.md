@@ -42,6 +42,9 @@ rampart --uv "create a FastAPI server with SQLAlchemy"
 # Custom workspace
 rampart -w ~/projects/myapp "refactor the auth module"
 
+# Prompt from file (for long/complex prompts)
+rampart -f ./plan.md
+
 # Pass environment variables to container
 rampart --env DEBUG=1 --env API_URL=http://localhost:3000 "run tests"
 
@@ -133,6 +136,7 @@ The container has:
 | `-w, --workspace PATH` | Workspace directory (default: current dir) |
 | `--build` | Force rebuild images |
 | `--shell` | Open interactive shell |
+| `-f, --file PATH` | Read prompt from file |
 | `--env KEY=VALUE` | Pass env var to container (repeatable) |
 | `-y, --yes` | Skip confirmation prompts |
 | `-v, --verbose` | Show debug output |
