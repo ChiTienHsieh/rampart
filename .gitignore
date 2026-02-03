@@ -1,0 +1,17 @@
+# Logs
+logs/
+
+# Ralph mode temp script
+.ralph-script.sh
+
+# macOS
+.DS_Store
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Test artifacts
+/tmp/
