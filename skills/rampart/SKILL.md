@@ -83,12 +83,15 @@ When running from Claude Code in sandbox mode, you MUST use `dangerouslyDisableS
 - Global configs in `~/.claude/` → NOT visible
 - Other project directories → NOT visible
 
-**Solution**: Copy any reference files (plans, configs, context docs) into the workspace before invoking rampart:
+**Solution A (recommended)**: Use `-f` flag to read prompt from file on host:
 ```bash
-# Copy plan file to workspace first
-cp ~/.claude/plans/my-plan.md ./ai_chatroom/plan.md
+# File is read on host, content passed directly to container
+rampart -f ~/.claude/plans/my-plan.md
+```
 
-# Then invoke rampart with workspace-local path
+**Solution B**: Copy reference files into workspace first:
+```bash
+cp ~/.claude/plans/my-plan.md ./ai_chatroom/plan.md
 rampart "Read plan at ./ai_chatroom/plan.md and implement it"
 ```
 
